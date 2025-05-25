@@ -8,7 +8,7 @@ public class conexionBD {
     public conexionBD(){
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String URL="jdbc:mysql://localhost:3306/bd_topicos_2025";
+            String URL="jdbc:mysql://localhost:3306/teatro_pleasantville";
             conexion=DriverManager.getConnection(URL,"root","carmelo");
 
             System.out.println("YEYYY");

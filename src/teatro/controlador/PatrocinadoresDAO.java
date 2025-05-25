@@ -1,4 +1,4 @@
-package teatro.DAO;
+package teatro.controlador;
 
 public class PatrocinadoresDAO {
 }
