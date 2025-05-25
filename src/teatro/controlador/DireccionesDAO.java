@@ -37,13 +37,13 @@ public class DireccionesDAO {
             String sql = "INSERT INTO direcciones (Id_Direccion,Numero_Casa,Calle,Colonia,Ciudad,Estado,Codigo_Postal,Telefono)VALUES (?,?,?,?,?,?,?,?)";
             statement = conexion.prepareStatement(sql);
 
-            statement.setString(1, direcciones.getId_Direccion());
-            statement.setString(2,direcciones.getNumero_Casa());
+            statement.setString(1, direcciones.getIdDireccion());
+            statement.setString(2,direcciones.getNumeroCasa());
             statement.setString(3,direcciones.getCalle());
             statement.setString(4,direcciones.getColonia());
             statement.setString(5,direcciones.getCiudad());
             statement.setString(6,direcciones.getEstado());
-            statement.setString(7,direcciones.getCodigo_Postal());
+            statement.setString(7,direcciones.getCodigoPostal());
             statement.setString(8,direcciones.getTelefono());
 
             int filasAfectadas = statement.executeUpdate();
