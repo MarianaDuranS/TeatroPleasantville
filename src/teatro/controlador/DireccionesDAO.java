@@ -100,6 +100,37 @@ public class DireccionesDAO {
     }
     }
 
+    public Direcciones mostrarDireccion(String idDireccion){
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        Direcciones direcciones = null;
+        try {
+            String sql = "SELECT * FROM alumnos WHERE Id_Direcciones = ?";
+            statement = conexion.prepareStatement(sql);
+            statement.setString(1, idDireccion);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                direcciones = crearDireccionDesdeResultSet(resultSet);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al buscar direccion: " + e.getMessage(), "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        } finally {
+            cerrarRecursos(statement, resultSet);
+        }
+        return direcciones;
+    }
+
+    private Direcciones crearDireccionDesdeResultSet(ResultSet rs) throws SQLException{
+        return new Direcciones(
+          rs.getString("Id_Direccion"), rs.getString("Numero_Casa"),
+                rs.getString("Calle"), rs.getString("Colonia"),
+                rs.getString("Ciudad"), rs.getString("Estado"),
+                rs.getString("Codigo_Postal"),rs.getString("Telefono")
+        );
+    }
+
+
     private void cerrarRecursos(Statement statement, ResultSet resultSet) {
         try {
             if (resultSet != null) resultSet.close();
