@@ -83,6 +83,23 @@ public class DireccionesDAO {
         }
     }
 
+    public boolean eliminarDireccion(String idDireccion){
+    PreparedStatement statement= null;
+    try {
+        String sql= "DELETE FROM direcciones WHERE Id_Direccion=?";
+        statement = conexion.prepareStatement(sql);
+        statement.setString(1,idDireccion);
+        int filasAfectadas = statement.executeUpdate();
+        return filasAfectadas > 0;
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al eliminar direccion: " + e.getMessage(), "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+        return false;
+    } finally {
+        cerrarRecursos(statement, null);
+    }
+    }
+
     private void cerrarRecursos(Statement statement, ResultSet resultSet) {
         try {
             if (resultSet != null) resultSet.close();
