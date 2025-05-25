@@ -57,6 +57,32 @@ public class DireccionesDAO {
         }
     }
 
+    public boolean editarDireccion(Direcciones direcciones){
+        PreparedStatement statement= null;
+
+        try {
+          String sql= "UPDATE direcciones SET Numero_Casa=?,Calle=?,Colonia=?,Ciudad=?,Estado=?,Codigo_Postal=?,Telefono=? WHERE Id_Direccion=?";
+          statement= conexion.prepareStatement(sql);
+
+            statement.setString(1, direcciones.getIdDireccion());
+            statement.setString(2,direcciones.getNumeroCasa());
+            statement.setString(3,direcciones.getCalle());
+            statement.setString(4,direcciones.getColonia());
+            statement.setString(5,direcciones.getCiudad());
+            statement.setString(6,direcciones.getEstado());
+            statement.setString(7,direcciones.getCodigoPostal());
+            statement.setString(8,direcciones.getTelefono());
+            int filasAfectadas = statement.executeUpdate();
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al editar direccion: " + e.getMessage(), "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            return false;
+        } finally {
+            cerrarRecursos(statement, null);
+        }
+    }
+
     private void cerrarRecursos(Statement statement, ResultSet resultSet) {
         try {
             if (resultSet != null) resultSet.close();
