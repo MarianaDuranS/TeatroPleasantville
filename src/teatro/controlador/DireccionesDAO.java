@@ -64,14 +64,15 @@ public class DireccionesDAO {
           String sql= "UPDATE direcciones SET Numero_Casa=?,Calle=?,Colonia=?,Ciudad=?,Estado=?,Codigo_Postal=?,Telefono=? WHERE Id_Direccion=?";
           statement= conexion.prepareStatement(sql);
 
-            statement.setString(1, direcciones.getIdDireccion());
-            statement.setString(2,direcciones.getNumeroCasa());
-            statement.setString(3,direcciones.getCalle());
-            statement.setString(4,direcciones.getColonia());
-            statement.setString(5,direcciones.getCiudad());
-            statement.setString(6,direcciones.getEstado());
-            statement.setString(7,direcciones.getCodigoPostal());
-            statement.setString(8,direcciones.getTelefono());
+
+            statement.setString(1,direcciones.getNumeroCasa());
+            statement.setString(2,direcciones.getCalle());
+            statement.setString(3,direcciones.getColonia());
+            statement.setString(4,direcciones.getCiudad());
+            statement.setString(5,direcciones.getEstado());
+            statement.setString(6,direcciones.getCodigoPostal());
+            statement.setString(7,direcciones.getTelefono());
+            statement.setString(8, direcciones.getIdDireccion());
             int filasAfectadas = statement.executeUpdate();
             return filasAfectadas > 0;
         } catch (SQLException e) {
@@ -84,28 +85,55 @@ public class DireccionesDAO {
     }
 
     public boolean eliminarDireccion(String idDireccion){
-    PreparedStatement statement= null;
-    try {
-        String sql= "DELETE FROM direcciones WHERE Id_Direccion=?";
-        statement = conexion.prepareStatement(sql);
-        statement.setString(1,idDireccion);
-        int filasAfectadas = statement.executeUpdate();
-        return filasAfectadas > 0;
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Error al eliminar direccion: " + e.getMessage(), "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-        return false;
-    } finally {
-        cerrarRecursos(statement, null);
+        if (direccionEnUso(idDireccion)) {
+            JOptionPane.showMessageDialog(null, "No se puede eliminar: La dirección está asociada a un miembro.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        PreparedStatement statement = null;
+        try {
+            String sql = "DELETE FROM direcciones WHERE Id_Direccion=?";
+            statement = conexion.prepareStatement(sql);
+
+            statement.setString(1, idDireccion);
+            int filasAfectadas = statement.executeUpdate();
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar dirección: " + e.getMessage(), "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            return false;
+        } finally {
+            cerrarRecursos(statement, null);
+        }
     }
+    private boolean direccionEnUso(String idDireccion) {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String sql = "SELECT COUNT(*) FROM miembros WHERE Id_Direccion = ?";
+            statement = conexion.prepareStatement(sql);
+            statement.setString(1, idDireccion);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+            return false;
+        }catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al verificar direccion: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            return true;
+        } finally {
+            cerrarRecursos(statement, resultSet);
+        }
     }
+
 
     public Direcciones mostrarDireccion(String idDireccion){
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         Direcciones direcciones = null;
         try {
-            String sql = "SELECT * FROM alumnos WHERE Id_Direcciones = ?";
+            String sql = "SELECT * FROM Direcciones WHERE Id_Direccion = ?";
             statement = conexion.prepareStatement(sql);
             statement.setString(1, idDireccion);
             resultSet = statement.executeQuery();
