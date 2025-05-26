@@ -2,7 +2,6 @@ package teatro.vista;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 public class InicioSesion extends JFrame{
     private JTextField txtUsuario;
     private JPasswordField txtContrasenia;
@@ -11,9 +10,11 @@ public class InicioSesion extends JFrame{
     GridBagConstraints gbc;
     private String usuarioTeatro= "adminM1";
     private String contraseniaTeatro ="teatro1M";
+
+
     public InicioSesion(){
         setTitle("Teatro Pleasantville - Inicio de Sesión");
-        setSize(350, 250);
+        setSize(550, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
