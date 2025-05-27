@@ -65,7 +65,13 @@ public class InicioSesion extends JFrame{
 
         if (usuarioTeatro.equals(usuario)&& contraseniaTeatro.equals(contrasenia)){
             JOptionPane.showMessageDialog(this, "Acceso concedido", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            //agregar el menu principal
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    new MenuPrincipalTeatro().setVisible(true);
+                }
+            });
+
             this.dispose();
         }else{
             JOptionPane.showMessageDialog(this,"Usuario o contraseña incorrectos","Error",JOptionPane.ERROR_MESSAGE);
