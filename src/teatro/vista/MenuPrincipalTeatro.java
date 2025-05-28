@@ -1,7 +1,7 @@
 package teatro.vista;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class MenuPrincipalTeatro extends JFrame{
 
@@ -33,6 +33,7 @@ public class MenuPrincipalTeatro extends JFrame{
         menuBar.add(menuOpcionesAsientos);
 
         itemAltasAsientos = new JMenuItem("Altas Asientos");
+        //agregar manejo de menu para asientos en cualquier ABCC
         menuOpcionesAsientos.add(itemAltasAsientos);
         itemBajasAsientos= new JMenuItem("Bajas Asientos");
         menuOpcionesAsientos.add(itemBajasAsientos);
@@ -46,6 +47,7 @@ public class MenuPrincipalTeatro extends JFrame{
         menuOpcionesBoletos= new JMenu("Boletos");
         menuBar.add(menuOpcionesBoletos);
         itemAltasBoletos = new JMenuItem("Altas Boletos");
+        //agregar manejo de menu para boletos en cualquier ABCC
         menuOpcionesBoletos.add(itemAltasBoletos);
         itemBajasBoletos= new JMenuItem("Bajas Boletos");
         menuOpcionesBoletos.add(itemBajasBoletos);
@@ -58,6 +60,7 @@ public class MenuPrincipalTeatro extends JFrame{
         menuOpcionesDirecciones= new JMenu("Direcciones");
         menuBar.add(menuOpcionesDirecciones);
         itemAltasDirecciones= new JMenuItem("Altas Direcciones");
+        //agregar manejo de menu para direcciones en cualquier ABCC
         menuOpcionesDirecciones.add(itemAltasDirecciones);
         itemBajasDirecciones= new JMenuItem("Bajas Direcciones");
         menuOpcionesDirecciones.add(itemBajasDirecciones);
@@ -70,6 +73,7 @@ public class MenuPrincipalTeatro extends JFrame{
         menuOpcionesFinancieros= new JMenu("Financieros");
         menuBar.add(menuOpcionesFinancieros);
         itemAltasFinancieros= new JMenuItem("Altas Financieros");
+        //agregar manejo de menu para financieros en cualquier ABCC
         menuOpcionesFinancieros.add(itemAltasFinancieros);
         itemBajasFinancieros= new JMenuItem("Bajas Financieros");
         menuOpcionesFinancieros.add(itemBajasFinancieros);
@@ -81,6 +85,7 @@ public class MenuPrincipalTeatro extends JFrame{
         menuOpcionesFunciones= new JMenu("Funciones");
         menuBar.add(menuOpcionesFunciones);
         itemAltasFunciones= new JMenuItem("Altas Funciones");
+        //agregar manejo de menu para funciones en cualquier ABCC
         menuOpcionesFunciones.add(itemAltasFunciones);
         itemBajasFunciones= new JMenuItem("Bajas Funciones");
         menuOpcionesFunciones.add(itemBajasFunciones);
@@ -93,6 +98,7 @@ public class MenuPrincipalTeatro extends JFrame{
         menuOpcionesMiembros= new JMenu("Miembros");
         menuBar.add(menuOpcionesMiembros);
         itemAltasMiembros= new JMenuItem("Altas Miembros");
+        //agregar manejo de menu para miembros en cualquier ABCC
         menuOpcionesMiembros.add(itemAltasMiembros);
         itemBajasMiembros= new JMenuItem("Bajas Miembros");
         menuOpcionesMiembros.add(itemBajasMiembros);
@@ -105,6 +111,7 @@ public class MenuPrincipalTeatro extends JFrame{
         menuOpcionesObras= new JMenu("Obras");
         menuBar.add(menuOpcionesObras);
         itemAltasObras= new JMenuItem("Altas Obras");
+        //agregar manejo de menu para Obras en cualquier ABCC
         menuOpcionesObras.add(itemAltasObras);
         itemBajasObras= new JMenuItem("Bajas Obras");
         menuOpcionesObras.add(itemBajasObras);
@@ -117,6 +124,7 @@ public class MenuPrincipalTeatro extends JFrame{
         menuBar.add(menuOpcionesOficiales);
 
         itemAltasOficiales= new JMenuItem("Altas Oficiales");
+        //agregar manejo de menu para oficiales en cualquier ABCC
         menuOpcionesOficiales.add(itemAltasOficiales);
         itemBajasOficiales= new JMenuItem("Bajas Oficiales");
         menuOpcionesOficiales.add(itemBajasOficiales);
@@ -130,6 +138,7 @@ public class MenuPrincipalTeatro extends JFrame{
         menuBar.add(menuOpcionesPatrocinadores);
 
         itemAltasPatrocinadores= new JMenuItem("Altas Patrocinadores");
+        //agregar manejo de menu para asientos en patrocinadores ABCC
         menuOpcionesPatrocinadores.add(itemAltasPatrocinadores);
         itemBajasPatrocinadores= new JMenuItem("Bajas Patrocinadores");
         menuOpcionesPatrocinadores.add(itemBajasPatrocinadores);
@@ -143,6 +152,7 @@ public class MenuPrincipalTeatro extends JFrame{
         menuBar.add(menuOpcionesPatronos);
 
         itemAltasPatronos= new JMenuItem("Altas Patronos");
+        //agregar manejo de menu para patronos en cualquier ABCC
         menuOpcionesPatronos.add(itemAltasPatronos);
         itemBajasPatronos= new JMenuItem("Bajas Patronos");
         menuOpcionesPatronos.add(itemBajasPatronos);
@@ -156,6 +166,7 @@ public class MenuPrincipalTeatro extends JFrame{
         menuBar.add(menuOpcionesProducciones);
 
         itemAltasProducciones= new JMenuItem("Altas Producciones");
+        //agregar manejo de menu para producciones en cualquier ABCC
         menuOpcionesProducciones.add(itemAltasProducciones);
         itemBajasProducciones= new JMenuItem("Bajas Producciones");
         menuOpcionesProducciones.add(itemBajasProducciones);
@@ -166,6 +177,38 @@ public class MenuPrincipalTeatro extends JFrame{
         setJMenuBar(menuBar);
 
     }
+
+    //Metodos asientos
+    private void seleccionMenuAsientos(ActionEvent e){
+        String accion= e.getActionCommand();
+        String seleccion="";
+
+        if (accion.contains("Altas")){
+            seleccion="alta";
+        } else if (accion.contains("Bajas")) {
+            seleccion="baja";
+        } else if (accion.contains("Cambios")) {
+            seleccion="cambio";
+        } else if (accion.contains("Consultas")) {
+            seleccion="consulta";
+        }
+
+    }
+    private void abrirVistaAsientos(String seleccion){
+        SwingUtilities.invokeLater(() -> {
+            vistaAsientos vistaAsiento = new vistaAsientos(seleccion);
+        });
+    }
+    //Metodos Boletos
+    //Metodos Direcciones
+    //Metodos Financieros
+    //Metodos Funciones
+    //Metodos Miembros
+    //Metodos Obras
+    //Metodos Oficiales
+    //Metodos patrocinadores
+    //Metodos patronos
+    //Metodos producciones
 
     public static void main(String[]args){
         SwingUtilities.invokeLater(new Runnable() {

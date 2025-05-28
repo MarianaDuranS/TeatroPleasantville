@@ -1,8 +1,6 @@
 package teatro.vista;
 import javax.swing.*;
 import java.awt.*;
-import java.sql.Date;
-import java.awt.event.ActionEvent;
 
 public class vistaMiembros extends  JFrame {
 private JTextField txtIdMiembro,txtNombre,txtPrimerApellido,txtsegundoApellido,txtFechaNacimiento,txtEmail,txtIdDireccion;
