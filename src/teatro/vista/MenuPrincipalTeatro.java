@@ -193,21 +193,213 @@ public class MenuPrincipalTeatro extends JFrame{
             seleccion="consulta";
         }
 
+        abrirVistaAsientos(seleccion);
+
     }
     private void abrirVistaAsientos(String seleccion){
         SwingUtilities.invokeLater(() -> {
             vistaAsientos vistaAsiento = new vistaAsientos(seleccion);
+            vistaAsiento.setVisible(true);
         });
     }
     //Metodos Boletos
+    private void seleccionMenuBoletos(ActionEvent e){
+        String accion= e.getActionCommand();
+        String seleccion="";
+
+        if (accion.contains("Altas")){
+            seleccion="alta";
+        } else if (accion.contains("Bajas")) {
+            seleccion="baja";
+        } else if (accion.contains("Cambios")) {
+            seleccion="cambio";
+        } else if (accion.contains("Consultas")) {
+            seleccion="consulta";
+        }
+        abrirVistaBoletos(seleccion);
+    }
+    private void abrirVistaBoletos(String seleccion){
+        SwingUtilities.invokeLater(() -> {
+            vistaBoletos vistaBoleto = new vistaBoletos(seleccion);
+            vistaBoleto.setVisible(true);
+        });
+    }
     //Metodos Direcciones
+    private void seleccionMenuDirecciones(ActionEvent e){
+        String accion= e.getActionCommand();
+        String seleccion="";
+
+        if (accion.contains("Altas")){
+            seleccion="alta";
+        } else if (accion.contains("Bajas")) {
+            seleccion="baja";
+        } else if (accion.contains("Cambios")) {
+            seleccion="cambio";
+        } else if (accion.contains("Consultas")) {
+            seleccion="consulta";
+        }
+        abrirVistaDirecciones(seleccion);
+    }
+    private void abrirVistaDirecciones(String seleccion){
+        SwingUtilities.invokeLater(() -> {
+            vistaDirecciones vistaDireccion = new vistaDirecciones(seleccion);
+            vistaDireccion.setVisible(true);
+        });
+    }
     //Metodos Financieros
+    private void seleccionMenuFinancieros(ActionEvent e){
+        String accion= e.getActionCommand();
+        String seleccion="";
+
+        if (accion.contains("Altas")){
+            seleccion="alta";
+        } else if (accion.contains("Bajas")) {
+            seleccion="baja";
+        } else if (accion.contains("Cambios")) {
+            seleccion="cambio";
+        } else if (accion.contains("Consultas")) {
+            seleccion="consulta";
+        }
+        abrirVistaFinancieros(seleccion);
+    }
+    private void abrirVistaFinancieros(String seleccion){
+        SwingUtilities.invokeLater(() -> {
+            vistaFinancieros vistaFinanciero = new vistaFinancieros(seleccion);
+            vistaFinanciero.setVisible(true);
+        });
+    }
     //Metodos Funciones
+    private void seleccionMenuFunciones(ActionEvent e){
+        String accion= e.getActionCommand();
+        String seleccion="";
+
+        if (accion.contains("Altas")){
+            seleccion="alta";
+        } else if (accion.contains("Bajas")) {
+            seleccion="baja";
+        } else if (accion.contains("Cambios")) {
+            seleccion="cambio";
+        } else if (accion.contains("Consultas")) {
+            seleccion="consulta";
+        }
+        abrirVistaFunciones(seleccion);
+    }
+    private void abrirVistaFunciones(String seleccion){
+        SwingUtilities.invokeLater(() -> {
+            vistaFunciones vistaFuncion = new vistaFunciones(seleccion);
+            vistaFuncion.setVisible(true);
+        });
+    }
     //Metodos Miembros
+    private void seleccionMenuMiembros(ActionEvent e){
+        String accion= e.getActionCommand();
+        String seleccion="";
+
+        if (accion.contains("Altas")){
+            seleccion="alta";
+        } else if (accion.contains("Bajas")) {
+            seleccion="baja";
+        } else if (accion.contains("Cambios")) {
+            seleccion="cambio";
+        } else if (accion.contains("Consultas")) {
+            seleccion="consulta";
+        }
+        abrirVistaMiembros(seleccion);
+    }
+    private void abrirVistaMiembros(String seleccion){
+        SwingUtilities.invokeLater(() -> {
+            vistaMiembros vistaMiembro = new vistaMiembros(seleccion);
+            vistaMiembro.setVisible(true);
+        });
+    }
     //Metodos Obras
+    private void seleccionMenuObras(ActionEvent e){
+        String accion= e.getActionCommand();
+        String seleccion="";
+
+        if (accion.contains("Altas")){
+            seleccion="alta";
+        } else if (accion.contains("Bajas")) {
+            seleccion="baja";
+        } else if (accion.contains("Cambios")) {
+            seleccion="cambio";
+        } else if (accion.contains("Consultas")) {
+            seleccion="consulta";
+        }
+        abrirVistaObras(seleccion);
+    }
+    private void abrirVistaObras(String seleccion){
+        SwingUtilities.invokeLater(() -> {
+            vistaObras vistaObra = new vistaObras(seleccion);
+            vistaObra.setVisible(true);
+        });
+    }
     //Metodos Oficiales
+    private void seleccionMenuOficiales(ActionEvent e){
+        String accion= e.getActionCommand();
+        String seleccion="";
+
+        if (accion.contains("Altas")){
+            seleccion="alta";
+        } else if (accion.contains("Bajas")) {
+            seleccion="baja";
+        } else if (accion.contains("Cambios")) {
+            seleccion="cambio";
+        } else if (accion.contains("Consultas")) {
+            seleccion="consulta";
+        }
+        abrirVistaOficiales(seleccion);
+    }
+    private void abrirVistaOficiales(String seleccion){
+        SwingUtilities.invokeLater(() -> {
+            vistaOficiales vistaOficial = new vistaOficiales(seleccion);
+            vistaOficial.setVisible(true);
+        });
+    }
     //Metodos patrocinadores
+    private void seleccionMenuPatrocinadores(ActionEvent e){
+        String accion= e.getActionCommand();
+        String seleccion="";
+
+        if (accion.contains("Altas")){
+            seleccion="alta";
+        } else if (accion.contains("Bajas")) {
+            seleccion="baja";
+        } else if (accion.contains("Cambios")) {
+            seleccion="cambio";
+        } else if (accion.contains("Consultas")) {
+            seleccion="consulta";
+        }
+        abrirVistaPatrocinadores(seleccion);
+    }
+    private void abrirVistaPatrocinadores(String seleccion){
+        SwingUtilities.invokeLater(() -> {
+            vistaPatrocinadores vistaPatrocinador = new vistaPatrocinadores(seleccion);
+            vistaPatrocinador.setVisible(true);
+        });
+    }
     //Metodos patronos
+    private void seleccionMenuPatronos(ActionEvent e){
+        String accion= e.getActionCommand();
+        String seleccion="";
+
+        if (accion.contains("Altas")){
+            seleccion="alta";
+        } else if (accion.contains("Bajas")) {
+            seleccion="baja";
+        } else if (accion.contains("Cambios")) {
+            seleccion="cambio";
+        } else if (accion.contains("Consultas")) {
+            seleccion="consulta";
+        }
+        abrirVistaPatronos(seleccion);
+    }
+    private void abrirVistaPatronos(String seleccion){
+        SwingUtilities.invokeLater(() -> {
+            vistaPatronos vistaPatrono = new vistaPatronos(seleccion);
+            vistaPatrono.setVisible(true);
+        });
+    }
     //Metodos producciones
 
     public static void main(String[]args){

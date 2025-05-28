@@ -1,4 +1,11 @@
 package teatro.vista;
 
-public class vistaObras {
+import javax.swing.*;
+
+public class vistaObras extends JFrame {
+    private String seleccion;
+
+    public vistaObras(String seleccion){
+        this.seleccion = seleccion;
+    }
 }

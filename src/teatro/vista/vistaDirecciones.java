@@ -1,5 +1,11 @@
 package teatro.vista;
 
-public class vistaDirecciones {
+import javax.swing.*;
 
+public class vistaDirecciones extends JFrame {
+    private String seleccion;
+
+    public vistaDirecciones(String seleccion){
+        this.seleccion = seleccion;
+    }
 }

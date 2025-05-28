@@ -3,13 +3,15 @@ import javax.swing.*;
 import java.awt.*;
 
 public class vistaMiembros extends  JFrame {
-private JTextField txtIdMiembro,txtNombre,txtPrimerApellido,txtsegundoApellido,txtFechaNacimiento,txtEmail,txtIdDireccion;
-private JSpinner spinnerGenero,spinnerEstadoCuota;
-private JButton btnGuardar,btnCancelar,btnReestablecer;
-GridBagConstraints gbc;
-private JPanel panelMain,panel,panelBotones;
+    private String seleccion;
+    private JTextField txtIdMiembro,txtNombre,txtPrimerApellido,txtsegundoApellido,txtFechaNacimiento,txtEmail,txtIdDireccion;
+    private JSpinner spinnerGenero,spinnerEstadoCuota;
+    private JButton btnGuardar,btnCancelar,btnReestablecer;
+    GridBagConstraints gbc;
+    private JPanel panelMain,panel,panelBotones;
 
-public vistaMiembros(){
+public vistaMiembros(String seleccion){
+    this.seleccion = seleccion;
     setTitle("Teatro Pleasantville - vistaMiembros");
     setSize(550, 550);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -114,7 +116,7 @@ public static void main(String[] args){
     SwingUtilities.invokeLater(new Runnable() {
         @Override
         public void run() {
-            new vistaMiembros().setVisible(true);
+            //new vistaMiembros(seleccion).setVisible(true);
         }
     });
 }

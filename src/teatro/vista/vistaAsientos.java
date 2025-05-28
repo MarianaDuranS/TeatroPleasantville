@@ -1,6 +1,8 @@
 package teatro.vista;
 
-public class vistaAsientos {
+import javax.swing.*;
+
+public class vistaAsientos extends JFrame {
     private String seleccion;
 
     public vistaAsientos(String seleccion){
