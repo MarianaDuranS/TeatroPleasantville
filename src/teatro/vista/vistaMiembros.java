@@ -5,22 +5,11 @@ import java.sql.Date;
 import java.awt.event.ActionEvent;
 
 public class vistaMiembros extends  JFrame {
-private JTextField txtIdMiembro;
-private JTextField txtNombre;
-private JTextField txtPrimerApellido;
-private JTextField txtsegundoApellido;
-private JTextField txtFechaNacimiento;
-private JSpinner spinnerGenero;
-private JTextField txtEmail;
-private JSpinner spinnerEstadoCuota;
-private JTextField txtIdDireccion;
-private JButton btnGuardar;
-private JButton btnCancelar;
-private JButton btnReestablecer;
+private JTextField txtIdMiembro,txtNombre,txtPrimerApellido,txtsegundoApellido,txtFechaNacimiento,txtEmail,txtIdDireccion;
+private JSpinner spinnerGenero,spinnerEstadoCuota;
+private JButton btnGuardar,btnCancelar,btnReestablecer;
 GridBagConstraints gbc;
-private JPanel panelMain;
-private JPanel panel;
-private JPanel panelBotones;
+private JPanel panelMain,panel,panelBotones;
 
 public vistaMiembros(){
     setTitle("Teatro Pleasantville - vistaMiembros");
