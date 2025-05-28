@@ -1,6 +1,11 @@
 package teatro.vista;
+import teatro.controlador.MiembrosDAO;
+import teatro.modelo.Miembros;
 import javax.swing.*;
 import java.awt.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class vistaMiembros extends  JFrame {
     private String seleccion;
@@ -9,9 +14,12 @@ public class vistaMiembros extends  JFrame {
     private JButton btnGuardar,btnCancelar,btnReestablecer;
     GridBagConstraints gbc;
     private JPanel panelMain,panel,panelBotones;
+    private MiembrosDAO miembrosDAO;
+    private final SimpleDateFormat formato= new SimpleDateFormat("yyyy-MM-dd");
 
-public vistaMiembros(String seleccion){
+    public vistaMiembros(String seleccion){
     this.seleccion = seleccion;
+    miembrosDAO= new MiembrosDAO();
     setTitle("Teatro Pleasantville - vistaMiembros");
     setSize(550, 550);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -93,19 +101,216 @@ public vistaMiembros(String seleccion){
     gbc.gridwidth=2;
     gbc.fill=GridBagConstraints.CENTER;
     panel.add(panelBotones,gbc);
-
-
-
-
-
+    configuracionInterfaz();
 
 }
+    private void configuracionInterfaz(){
+        switch (seleccion.toLowerCase()){
+            case "alta":
+                configuracionAltasMiembros();
+                break;
+            case "baja":
+                configuracionBajasMiembros();
+                break;
+            case "cambio":
+                configuracionCambiosMiembros();
+                break;
+            case "consulta":
+                configuracionConsultasMiembros();
+                break;
+            default:
+                configuracionConsultasMiembros();
+        }
+
+    }
+    private void configuracionAltasMiembros(){
+        setTitle("Teatro Pleasantville - Altas Miembros");
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(e -> guardarMiembro());
+        habilitarCampos(true);
+        txtIdMiembro.setEnabled(false);
+        btnReestablecer.setVisible(true);
+    }
+    private void configuracionBajasMiembros(){
+        setTitle("Teatro Pleasantville - Baja de Miembro");
+        btnGuardar.setText("Eliminar");
+        btnGuardar.addActionListener(e -> eliminarMiembro());
+
+        habilitarCampos(false);
+        txtIdMiembro.setEnabled(true);
+        btnReestablecer.setVisible(false);
+
+        txtIdMiembro.addActionListener(e -> buscarMiembro());
+    }
+    private void configuracionCambiosMiembros(){
+        setTitle("Teatro Pleasantville - Modificar Miembro");
+        btnGuardar.setText("Actualizar");
+        btnGuardar.addActionListener(e -> actualizarMiembro());
+
+        habilitarCampos(false);
+        txtIdMiembro.setEnabled(true);
+        btnReestablecer.setVisible(true);
+        txtIdMiembro.addActionListener(e -> {
+            buscarMiembro();
+            if (!txtNombre.getText().isEmpty()) {
+                habilitarCampos(true);
+            }
+        });
+    }
+    private void configuracionConsultasMiembros(){
+        setTitle("Teatro Pleasantville - Consultar Miembro");
+        btnGuardar.setText("Buscar");
+        btnGuardar.addActionListener(e -> buscarMiembro());
+
+        habilitarCampos(false);
+        txtIdMiembro.setEnabled(true);
+        btnReestablecer.setVisible(false);
+    }
+    private void guardarMiembro(){
+        if (validarCampos()){
+            try {
+                String idMiembro = String.format("%08d", (int) (Math.random() * 100000000));
+                txtIdMiembro.setText(idMiembro);
+
+                Miembros miembro = crearMiembroCampos(idMiembro);
+                if (miembrosDAO.agregarMiembro(miembro)) {
+                    JOptionPane.showMessageDialog(this, "Miembro registrado con éxito");
+                    limpiarCampos();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al registrar miembro", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }catch (ParseException e){
+                JOptionPane.showMessageDialog(this, "Formato de fecha inválido (use yyyy-MM-dd)", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
+    }
+    private void eliminarMiembro(){
+        String idMiembro=txtIdMiembro.getText();
+        if (txtIdMiembro.getText().isEmpty()){
+        JOptionPane.showMessageDialog(this,"Ingrese un ID");
+        }
+        int confirmacion= JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar este miembro?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            if (miembrosDAO.eliminarMiembro(idMiembro)) {
+                JOptionPane.showMessageDialog(this, "Miembro eliminado con éxito");
+                limpiarCampos();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al eliminar miembro", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        limpiarCampos();
+    }
+    private void actualizarMiembro(){
+        try {
+            String idMiembro = txtIdMiembro.getText().trim();
+            Miembros miembro = crearMiembroCampos(idMiembro);
+            if (miembrosDAO.editarMiembro(miembro)) {
+                JOptionPane.showMessageDialog(this, "Miembro actualizado con éxito");
+                limpiarCampos();
+                habilitarCampos(false);
+                txtIdMiembro.setEnabled(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al actualizar miembro", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(this, "Formato de fecha inválido (use yyyy-MM-dd)", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    private void buscarMiembro(){
+        String idMiembro=txtIdMiembro.getText();
+        if (idMiembro.isEmpty()){
+            JOptionPane.showMessageDialog(this,"Ingrese el id");
+            return;
+        }
+
+        Miembros miembro= miembrosDAO.mostrarMiembro(idMiembro);
+        if (miembro != null) {
+            llenadoDesdeCampos(miembro);
+        } else {
+            JOptionPane.showMessageDialog(this, "Miembro no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+            limpiarCampos();
+        }
+
+    }
+    private Miembros crearMiembroCampos(String idMiembro) throws ParseException{
+        String nombre=txtNombre.getText();
+        String primerApellido=txtPrimerApellido.getText();
+        String segundoApellido=txtsegundoApellido.getText();
+        Date fechaNacimiento=formato.parse(txtFechaNacimiento.getText());
+        String genero=(String) spinnerGenero.getValue();
+        String email=txtEmail.getText();
+        String estadoCuota=(String) spinnerEstadoCuota.getValue();
+        String idDireccion=txtIdDireccion.getText();
+
+        return new Miembros(idMiembro,nombre,primerApellido,segundoApellido,fechaNacimiento,genero,email,estadoCuota,idDireccion);
+    }
+    private void llenadoDesdeCampos(Miembros miembro){
+        txtIdMiembro.setText(miembro.getIdMiembro());
+        txtNombre.setText(miembro.getNombre() != null ? miembro.getNombre() : "");
+        txtPrimerApellido.setText(miembro.getPrimerApellido() != null ? miembro.getPrimerApellido() : "");
+        txtsegundoApellido.setText(miembro.getSegundoApellido() != null ? miembro.getSegundoApellido() : "");
+        txtFechaNacimiento.setText(miembro.getFechaNacimiento() != null ? formato.format(miembro.getFechaNacimiento()) : "");
+        spinnerGenero.setValue(miembro.getGenero() != null ? miembro.getGenero() : "Hombre");
+        txtEmail.setText(miembro.getEmail() != null ? miembro.getEmail() : "");
+        spinnerEstadoCuota.setValue(miembro.getEstadoCuota() != null ? miembro.getEstadoCuota() : "Pagada");
+        txtIdDireccion.setText(miembro.getIdDireccion() != null ? miembro.getIdDireccion() : "");
+    }
     private void agregarComponentes(JComponent component, int gridx, int gridy){
         gbc.gridx = gridx;
         gbc.gridy = gridy;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(component, gbc);
     }
+    private void habilitarCampos(boolean habilitar){
+        txtNombre.setEnabled(habilitar);
+        txtPrimerApellido.setEnabled(habilitar);
+        txtsegundoApellido.setEnabled(habilitar);
+        txtFechaNacimiento.setEnabled(habilitar);
+        spinnerGenero.setEnabled(habilitar);
+        txtEmail.setEnabled(habilitar);
+        spinnerEstadoCuota.setEnabled(habilitar);
+        txtIdDireccion.setEnabled(habilitar);
+    }
+    private void limpiarCampos() {
+        txtIdMiembro.setText("");
+        txtNombre.setText("");
+        txtPrimerApellido.setText("");
+        txtsegundoApellido.setText("");
+        txtFechaNacimiento.setText("");
+        spinnerGenero.setValue("Hombre");
+        txtEmail.setText("");
+        spinnerEstadoCuota.setValue("Pagada");
+        txtIdDireccion.setText("");
+    }
+    private boolean validarCampos(){
+        if (txtNombre.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this,"El nombre es obligatorio");
+            return false;
+        }
+
+        if (txtPrimerApellido.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this,"El primer apellido es obligatorio");
+            return false;
+        }
+
+        if (txtFechaNacimiento.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this,"La fecha de nacimiento es obligatoria");
+            return false;
+        }
+        if (txtEmail.getText().isEmpty() || !txtEmail.getText().contains("@")) {
+            JOptionPane.showMessageDialog(this,"Ingrese un email válido");
+            return false;
+        }
+
+        if (txtIdDireccion.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this,"El ID de dirección es obligatorio");
+            return false;
+        }
+
+        return true;
+    }
+
     private void agregarEtiquetas(String texto, int gridx, int gridy){
     JLabel etiqueta= new JLabel(texto);
     gbc.gridx = gridx;

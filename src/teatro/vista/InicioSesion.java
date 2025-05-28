@@ -8,13 +8,13 @@ public class InicioSesion extends JFrame{
     private JButton btnInicioSesion;
     private JPanel panel;
     GridBagConstraints gbc;
-    private String usuarioTeatro= "adminM1";
-    private String contraseniaTeatro ="teatro1M";
+    private String usuarioTeatro= "12345678";
+    private String contraseniaTeatro ="00000000";
 
 
     public InicioSesion(){
         setTitle("Teatro Pleasantville - Inicio de Sesión");
-        setSize(550, 550);
+        setSize(850, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
