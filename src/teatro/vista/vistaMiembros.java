@@ -3,6 +3,8 @@ import teatro.controlador.MiembrosDAO;
 import teatro.modelo.Miembros;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,7 +13,7 @@ public class vistaMiembros extends  JFrame {
     private String seleccion;
     private JTextField txtIdMiembro,txtNombre,txtPrimerApellido,txtsegundoApellido,txtFechaNacimiento,txtEmail,txtIdDireccion;
     private JSpinner spinnerGenero,spinnerEstadoCuota;
-    private JButton btnGuardar,btnCancelar,btnReestablecer;
+    private JButton btnGuardar,btnRegresar,btnReestablecer;
     GridBagConstraints gbc;
     private JPanel panelMain,panel,panelBotones;
     private MiembrosDAO miembrosDAO;
@@ -90,11 +92,26 @@ public class vistaMiembros extends  JFrame {
     btnGuardar=new JButton("Guardar");
     panelBotones.add(btnGuardar);
 
-    btnCancelar= new JButton("Cancelar");
-    panelBotones.add(btnCancelar);
+    btnRegresar= new JButton("Regresar");
+    panelBotones.add(btnRegresar);
+        btnRegresar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Window ventana= SwingUtilities.getWindowAncestor(btnRegresar);
+                if (ventana != null) {
+                    ventana.dispose();
+                }
+            }
+        });
 
     btnReestablecer= new JButton("Reestablecer");
     panelBotones.add(btnReestablecer);
+    btnReestablecer.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            limpiarCampos();
+        }
+    });
 
     gbc.gridx = 0;
     gbc.gridy = 9;
@@ -129,7 +146,6 @@ public class vistaMiembros extends  JFrame {
         btnGuardar.addActionListener(e -> guardarMiembro());
         habilitarCampos(true);
         txtIdMiembro.setEnabled(false);
-        btnReestablecer.setVisible(true);
     }
     private void configuracionBajasMiembros(){
         setTitle("Teatro Pleasantville - Baja de Miembro");
@@ -138,7 +154,6 @@ public class vistaMiembros extends  JFrame {
 
         habilitarCampos(false);
         txtIdMiembro.setEnabled(true);
-        btnReestablecer.setVisible(false);
 
         txtIdMiembro.addActionListener(e -> buscarMiembro());
     }
@@ -149,7 +164,6 @@ public class vistaMiembros extends  JFrame {
 
         habilitarCampos(false);
         txtIdMiembro.setEnabled(true);
-        btnReestablecer.setVisible(true);
         txtIdMiembro.addActionListener(e -> {
             buscarMiembro();
             if (!txtNombre.getText().isEmpty()) {
@@ -164,7 +178,6 @@ public class vistaMiembros extends  JFrame {
 
         habilitarCampos(false);
         txtIdMiembro.setEnabled(true);
-        btnReestablecer.setVisible(false);
     }
     private void guardarMiembro(){
         if (validarCampos()){
