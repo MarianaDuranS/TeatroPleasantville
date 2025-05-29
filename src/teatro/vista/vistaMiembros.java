@@ -182,6 +182,7 @@ public class vistaMiembros extends  JFrame {
 
         habilitarCampos(false);
         txtIdMiembro.setEnabled(true);
+        txtIdDireccion.setEditable(true);
     }
     private void guardarMiembro(){
         if (validarCampos()){
@@ -256,19 +257,40 @@ public class vistaMiembros extends  JFrame {
                     Miembros miembro = get();
                     if (miembro != null) {
                         llenadoDesdeCampos(miembro);
+                        JOptionPane.showMessageDialog(vistaMiembros.this,
+                                "Miembro encontrado con éxito",
+                                "Éxito",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        selectMemberInTable(idMiembro);
                     } else {
-                        JOptionPane.showMessageDialog(vistaMiembros.this, "Miembro no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(vistaMiembros.this,
+                                "Miembro con ID " + idMiembro + " no encontrado",
+                                "No Encontrado",
+                                JOptionPane.WARNING_MESSAGE);
                         limpiarCampos();
                     }
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(vistaMiembros.this, "Error al buscar miembro: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(vistaMiembros.this,
+                            "Error al buscar miembro: " + e.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
                     e.printStackTrace();
                 } finally {
                     btnGuardar.setEnabled(true);
                 }
             }
         };
+        worker.execute();
         cargarDatos();
+    }
+    private void selectMemberInTable(String idMiembro) {
+        for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+            if (modeloTabla.getValueAt(i, 0).equals(idMiembro)) {
+                tablaMiembros.setRowSelectionInterval(i, i);
+                tablaMiembros.scrollRectToVisible(tablaMiembros.getCellRect(i, 0, true));
+                break;
+            }
+        }
     }
     private Miembros crearMiembroCampos(String idMiembro) throws ParseException{
         String nombre=txtNombre.getText();
@@ -400,7 +422,7 @@ public class vistaMiembros extends  JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new vistaMiembros("consulta").setVisible(true);
+                new vistaMiembros("altas").setVisible(true);
             }
         });
     }
