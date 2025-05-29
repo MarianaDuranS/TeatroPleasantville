@@ -169,13 +169,10 @@ public class vistaMiembros extends  JFrame {
         btnGuardar.setText("Actualizar");
         btnGuardar.addActionListener(e -> actualizarMiembro());
 
-        habilitarCampos(false);
+        habilitarCampos(true);
         txtIdMiembro.setEnabled(true);
         txtIdMiembro.addActionListener(e -> {
             buscarMiembro();
-            if (!txtNombre.getText().isEmpty()) {
-                habilitarCampos(true);
-            }
         });
     }
     private void configuracionConsultasMiembros(){
@@ -399,4 +396,12 @@ public class vistaMiembros extends  JFrame {
         panel.add(etiqueta, gbc);
     }
 
+    public static void main(String args[]){
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new vistaMiembros("consulta").setVisible(true);
+            }
+        });
+    }
 }
