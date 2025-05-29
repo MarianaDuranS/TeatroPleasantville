@@ -1,35 +1,14 @@
 package teatro.controlador;
+import teatro.conexionDB.conexionBD;
 import teatro.modelo.Direcciones;
 import java.sql.*;
 import javax.swing.JOptionPane;
 public class DireccionesDAO {
     private Connection conexion;
-    private final String url = "jdbc:mysql://localhost:3306/teatro_pleasantville";
-    private final String user = "root";
-    private final String contra = "carmelo";
-    private final String driver = "com.mysql.cj.jdbc.Driver";
-
     public DireccionesDAO(){
-        establecerConexion();
+       this.conexion=conexionBD.getInstancia().getConexion();
     }
 
-    private void establecerConexion() {
-        try {
-            Class.forName(driver);
-            conexion = DriverManager.getConnection(url, user, contra);
-            if (conexion != null) {
-                System.out.println("Conexión a la base de datos exitosa.");
-            }
-        } catch (ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "Error: No se encontró el controlador JDBC.", "Error de Conexión", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-            conexion = null;
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos: " + e.getMessage(), "Error de Conexión", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-            conexion = null;
-        }
-    }
 
     public boolean agregarDireccion(Direcciones direcciones) {
         PreparedStatement statement = null;
