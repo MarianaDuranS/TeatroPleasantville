@@ -23,84 +23,84 @@ public class vistaMiembros extends  JFrame {
     private JTable tablaMiembros;
     private DefaultTableModel modeloTabla;
     public vistaMiembros(String seleccion){
-    this.seleccion = seleccion;
-    miembrosDAO= new MiembrosDAO();
-    setTitle("Teatro Pleasantville - vistaMiembros");
-    setSize(900, 800);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setLocationRelativeTo(null);
-    setResizable(false);
+        this.seleccion = seleccion;
+        miembrosDAO= new MiembrosDAO();
+        setTitle("Teatro Pleasantville - vistaMiembros");
+        setSize(900, 800);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setResizable(false);
 
-    panelMain = new JPanel(new BorderLayout());
-    panelMain.setBackground(new Color(00, 149, 236));
-    add(panelMain);
+        panelMain = new JPanel(new BorderLayout());
+        panelMain.setBackground(new Color(00, 149, 236));
+        add(panelMain);
 
-    JLabel Titulo= new JLabel("MIEMBROS", SwingConstants.CENTER);
-    Titulo.setFont(new Font("Verdana",Font.BOLD,24));
-    Titulo.setBorder(BorderFactory.createEmptyBorder(15,0,15,0));
-    panelMain.add(Titulo, BorderLayout.NORTH);
+        JLabel Titulo= new JLabel("MIEMBROS", SwingConstants.CENTER);
+        Titulo.setFont(new Font("Verdana",Font.BOLD,24));
+        Titulo.setBorder(BorderFactory.createEmptyBorder(15,0,15,0));
+        panelMain.add(Titulo, BorderLayout.NORTH);
 
-    panel= new JPanel();
-    panel.setBorder(BorderFactory.createEmptyBorder(0,20,20,20));
-    panel.setBackground(new Color(00, 149, 236));
-    panel.setLayout(new GridBagLayout());
-    panelMain.add(panel,BorderLayout.CENTER);
+        panel= new JPanel();
+        panel.setBorder(BorderFactory.createEmptyBorder(0,20,20,20));
+        panel.setBackground(new Color(00, 149, 236));
+        panel.setLayout(new GridBagLayout());
+        panelMain.add(panel,BorderLayout.CENTER);
 
-    gbc= new GridBagConstraints();
-    gbc.insets= new Insets(5,5,5,5);
-    gbc.fill=GridBagConstraints.HORIZONTAL;
+        gbc= new GridBagConstraints();
+        gbc.insets= new Insets(5,5,5,5);
+        gbc.fill=GridBagConstraints.HORIZONTAL;
 
-    crearTablaMiembros();
+        crearTablaMiembros();
 
-    //agregarComponentes
+        //agregarComponentes
 
 
-    agregarEtiquetas("Id Miembro: ",0,0);
-    txtIdMiembro=new JTextField(8);
-    agregarComponentes(txtIdMiembro,1,0);
+        agregarEtiquetas("Id Miembro: ",0,0);
+        txtIdMiembro=new JTextField(8);
+        agregarComponentes(txtIdMiembro,1,0);
 
-    agregarEtiquetas("Nombre :",0,1);
-    txtNombre= new JTextField(30);
-    agregarComponentes(txtNombre,1,1);
+        agregarEtiquetas("Nombre :",0,1);
+        txtNombre= new JTextField(30);
+        agregarComponentes(txtNombre,1,1);
 
-    agregarEtiquetas("Primer apellido: ",0,2);
-    txtPrimerApellido= new JTextField(30);
-    agregarComponentes(txtPrimerApellido,1,2);
+        agregarEtiquetas("Primer apellido: ",0,2);
+        txtPrimerApellido= new JTextField(30);
+        agregarComponentes(txtPrimerApellido,1,2);
 
-    agregarEtiquetas("Segundo apellido: ",0,3);
-    txtsegundoApellido= new JTextField(30);
-    agregarComponentes(txtsegundoApellido,1,3);
+        agregarEtiquetas("Segundo apellido: ",0,3);
+        txtsegundoApellido= new JTextField(30);
+        agregarComponentes(txtsegundoApellido,1,3);
 
-    agregarEtiquetas("Fecha nacimiento :",0,4);
-    txtFechaNacimiento= new JTextField(20);
-    agregarComponentes(txtFechaNacimiento,1,4);
+        agregarEtiquetas("Fecha nacimiento :",0,4);
+        txtFechaNacimiento= new JTextField(20);
+        agregarComponentes(txtFechaNacimiento,1,4);
 
-    String generos[]= {"Hombre","Mujer","Otro"};
-    agregarEtiquetas("Género",0,5);
-    spinnerGenero= new JSpinner(new SpinnerListModel(generos));
-    agregarComponentes(spinnerGenero,1,5);
+        String generos[]= {"Hombre","Mujer","Otro"};
+        agregarEtiquetas("Género",0,5);
+        spinnerGenero= new JSpinner(new SpinnerListModel(generos));
+        agregarComponentes(spinnerGenero,1,5);
 
-    agregarEtiquetas("Email: ",0,6);
-    txtEmail= new JTextField(30);
-    agregarComponentes(txtEmail,1,6);
+        agregarEtiquetas("Email: ",0,6);
+        txtEmail= new JTextField(30);
+        agregarComponentes(txtEmail,1,6);
 
-    String estadoCuota []={"Pagada","Pendiente"};
-    agregarEtiquetas("Estado cuota: ",0,7);
-    spinnerEstadoCuota= new JSpinner(new SpinnerListModel(estadoCuota));
-    agregarComponentes(spinnerEstadoCuota,1,7);
+        String estadoCuota []={"Pagada","Pendiente"};
+        agregarEtiquetas("Estado cuota: ",0,7);
+        spinnerEstadoCuota= new JSpinner(new SpinnerListModel(estadoCuota));
+        agregarComponentes(spinnerEstadoCuota,1,7);
 
-    agregarEtiquetas("Id Direccion: ",0,8);
-    txtIdDireccion= new JTextField(30);
-    agregarComponentes(txtIdDireccion,1,8);
+        agregarEtiquetas("Id Direccion: ",0,8);
+        txtIdDireccion= new JTextField(30);
+        agregarComponentes(txtIdDireccion,1,8);
 
-    panelBotones= new JPanel(new FlowLayout(FlowLayout.CENTER,10,10));
-    panelBotones.setBackground(new Color(00, 149, 236));
+        panelBotones= new JPanel(new FlowLayout(FlowLayout.CENTER,10,10));
+        panelBotones.setBackground(new Color(00, 149, 236));
 
-    btnGuardar=new JButton("Guardar");
-    panelBotones.add(btnGuardar);
+        btnGuardar=new JButton("Guardar");
+        panelBotones.add(btnGuardar);
 
-    btnRegresar= new JButton("Regresar");
-    panelBotones.add(btnRegresar);
+        btnRegresar= new JButton("Regresar");
+        panelBotones.add(btnRegresar);
         btnRegresar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -111,23 +111,23 @@ public class vistaMiembros extends  JFrame {
             }
         });
 
-    btnReestablecer= new JButton("Reestablecer");
-    panelBotones.add(btnReestablecer);
-    btnReestablecer.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            limpiarCampos();
-        }
-    });
+        btnReestablecer= new JButton("Reestablecer");
+        panelBotones.add(btnReestablecer);
+        btnReestablecer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                limpiarCampos();
+            }
+        });
 
-    gbc.gridx = 0;
-    gbc.gridy = 9;
-    gbc.gridwidth=2;
-    gbc.fill=GridBagConstraints.CENTER;
-    panel.add(panelBotones,gbc);
-    configuracionInterfaz();
+        gbc.gridx = 0;
+        gbc.gridy = 9;
+        gbc.gridwidth=2;
+        gbc.fill=GridBagConstraints.CENTER;
+        panel.add(panelBotones,gbc);
+        configuracionInterfaz();
 
-}
+    }
     private void configuracionInterfaz(){
         switch (seleccion.toLowerCase()){
             case "alta":
@@ -209,7 +209,7 @@ public class vistaMiembros extends  JFrame {
     private void eliminarMiembro(){
         String idMiembro=txtIdMiembro.getText();
         if (txtIdMiembro.getText().isEmpty()){
-        JOptionPane.showMessageDialog(this,"Ingrese un ID");
+            JOptionPane.showMessageDialog(this,"Ingrese un ID");
         }
         int confirmacion= JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar este miembro?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
         if (confirmacion == JOptionPane.YES_OPTION) {
@@ -391,10 +391,10 @@ public class vistaMiembros extends  JFrame {
         }
     }
     private void agregarEtiquetas(String texto, int gridx, int gridy){
-    JLabel etiqueta= new JLabel(texto);
-    etiqueta.setForeground(Color.WHITE);
-    etiqueta.setFont(new Font("Courier New",Font.BOLD,15));
-    gbc.gridx = gridx;
+        JLabel etiqueta= new JLabel(texto);
+        etiqueta.setForeground(Color.WHITE);
+        etiqueta.setFont(new Font("Courier New",Font.BOLD,15));
+        gbc.gridx = gridx;
         gbc.gridy = gridy;
         panel.add(etiqueta, gbc);
     }

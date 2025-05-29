@@ -1,6 +1,5 @@
 package teatro.controlador;
-import teatro.conexionDB.conexionBD
-import teatro.modelo.Miembros;
+import teatro.conexionDB.conexionBD;
 import teatro.modelo.Oficiales;
 
 import javax.swing.*;
@@ -21,8 +20,8 @@ public class OficialesDAO {
             statement = conexion.prepareStatement(sql);
 
             statement.setString(1, oficiales.getIdOficial());
-            statement.setString(2,oficiales.getIdNombre());
-            statement.setString(3,oficiales.cargo());
+            statement.setString(2,oficiales.getIdMiembro());
+            statement.setString(3,oficiales.getCargo());
             statement.setDate(4, new java.sql.Date(oficiales.getFechaInicio().getTime()));
             statement.setDate(4, new java.sql.Date(oficiales.getFechaFin().getTime()));
 
@@ -44,7 +43,7 @@ public class OficialesDAO {
             statement = conexion.prepareStatement(sql);
             statement.setString(1, oficiales.getIdMiembro());
             statement.setString(2, oficiales.getCargo());
-            statement.setDate(3, new java.sql.Date(oficiales.getFechaInicio).getTime()));
+            statement.setDate(3, new java.sql.Date(oficiales.getFechaInicio().getTime()));
             statement.setDate(4, new java.sql.Date(oficiales.getFechaFin().getTime()));
             int filasAfectadas = statement.executeUpdate();
             return filasAfectadas > 0;
@@ -76,7 +75,7 @@ public class OficialesDAO {
         }
     }
 
-    public Miembros mostrarOficiales(String idMiembro) {
+    public Oficiales mostrarOficiales(String idMiembro) {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         Oficiales oficial = null;
@@ -93,7 +92,7 @@ public class OficialesDAO {
                         resultSet.getString("Id_Miembro"),
                         resultSet.getString("Cargo"),
                         resultSet.getDate("Fecha_Inicio"),
-                        resultSet.getDate("Fecha_Fin"),
+                        resultSet.getDate("Fecha_Fin")
                 );
             }
         } catch (SQLException e) {
@@ -116,14 +115,14 @@ public class OficialesDAO {
             resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                Oficiales oficiales = new Oficiales(
+                Oficiales oficiales1 = new Oficiales(
                         resultSet.getString("Id_Oficiales"),
                         resultSet.getString("Id_Miembro"),
                         resultSet.getString("Cargo"),
                         resultSet.getDate("Fecha_Inicio"),
-                        resultSet.getDate("Fecha_Fin"),
+                        resultSet.getDate("Fecha_Fin")
                 );
-                oficiales.add(oficiales);
+                oficiales.add(oficiales1);
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al obtener oficiales: " + e.getMessage(),
