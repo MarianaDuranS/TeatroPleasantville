@@ -2,12 +2,14 @@ package teatro.vista;
 import teatro.controlador.MiembrosDAO;
 import teatro.modelo.Miembros;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class vistaMiembros extends  JFrame {
     private String seleccion;
@@ -18,12 +20,13 @@ public class vistaMiembros extends  JFrame {
     private JPanel panelMain,panel,panelBotones;
     private MiembrosDAO miembrosDAO;
     private final SimpleDateFormat formato= new SimpleDateFormat("yyyy-MM-dd");
-
+    private JTable tablaMiembros;
+    private DefaultTableModel modeloTabla;
     public vistaMiembros(String seleccion){
     this.seleccion = seleccion;
     miembrosDAO= new MiembrosDAO();
     setTitle("Teatro Pleasantville - vistaMiembros");
-    setSize(550, 550);
+    setSize(900, 800);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
     setResizable(false);
@@ -47,6 +50,7 @@ public class vistaMiembros extends  JFrame {
     gbc.insets= new Insets(5,5,5,5);
     gbc.fill=GridBagConstraints.HORIZONTAL;
 
+    crearTablaMiembros();
 
     //agregarComponentes
 
@@ -200,6 +204,7 @@ public class vistaMiembros extends  JFrame {
             }
 
         }
+        cargarDatos();
     }
     private void eliminarMiembro(){
         String idMiembro=txtIdMiembro.getText();
@@ -216,6 +221,7 @@ public class vistaMiembros extends  JFrame {
             }
         }
         limpiarCampos();
+        cargarDatos();
     }
     private void actualizarMiembro(){
         try {
@@ -232,6 +238,7 @@ public class vistaMiembros extends  JFrame {
         } catch (ParseException e) {
             JOptionPane.showMessageDialog(this, "Formato de fecha inválido (use yyyy-MM-dd)", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        cargarDatos();
     }
     private void buscarMiembro(){
         String idMiembro=txtIdMiembro.getText();
@@ -264,6 +271,7 @@ public class vistaMiembros extends  JFrame {
                 }
             }
         };
+        cargarDatos();
     }
     private Miembros crearMiembroCampos(String idMiembro) throws ParseException{
         String nombre=txtNombre.getText();
@@ -342,7 +350,46 @@ public class vistaMiembros extends  JFrame {
 
         return true;
     }
+    private void crearTablaMiembros(){
+        String[] columnas = {"ID", "Nombre", "Primer Apellido", "Segundo Apellido", "Fecha Nac.",
+                "Género", "Email", "Estado Cuota", "ID Dirección"};
 
+        modeloTabla = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tablaMiembros = new JTable(modeloTabla);
+        tablaMiembros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        JScrollPane scrollPane = new JScrollPane(tablaMiembros);
+        scrollPane.setPreferredSize(new Dimension(800, 200));
+
+        panelMain.add(scrollPane, BorderLayout.SOUTH);
+
+        cargarDatos();
+    }
+    private void cargarDatos(){
+        modeloTabla.setRowCount(0);
+        List<Miembros> miembros = miembrosDAO.obtenerTodosMiembros();
+        if (miembros != null) {
+            for (Miembros miembro : miembros) {
+                Object[] fila = {
+                        miembro.getIdMiembro(),
+                        miembro.getNombre(),
+                        miembro.getPrimerApellido(),
+                        miembro.getSegundoApellido(),
+                        formato.format(miembro.getFechaNacimiento()),
+                        miembro.getGenero(),
+                        miembro.getEmail(),
+                        miembro.getEstadoCuota(),
+                        miembro.getIdDireccion()
+                };
+                modeloTabla.addRow(fila);
+            }
+        }
+    }
     private void agregarEtiquetas(String texto, int gridx, int gridy){
     JLabel etiqueta= new JLabel(texto);
     etiqueta.setForeground(Color.WHITE);

@@ -3,6 +3,9 @@ import teatro.conexionDB.conexionBD;
 import teatro.modelo.Miembros;
 import javax.swing.*;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MiembrosDAO {
     private Connection conexion;
 
@@ -112,6 +115,41 @@ public class MiembrosDAO {
             cerrarRecursos(statement, resultSet);
         }
         return miembro;
+    }
+
+    public List<Miembros> obtenerTodosMiembros() {
+        List<Miembros> miembros = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            String sql = "SELECT * FROM miembros";
+            statement = conexion.prepareStatement(sql);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Miembros miembro = new Miembros(
+                        resultSet.getString("Id_Miembro"),
+                        resultSet.getString("Nombre"),
+                        resultSet.getString("Primer_Apellido"),
+                        resultSet.getString("Segundo_Apellido"),
+                        resultSet.getDate("Fecha_Nacimiento"),
+                        resultSet.getString("Genero"),
+                        resultSet.getString("Email"),
+                        resultSet.getString("Estado_Cuota"),
+                        resultSet.getString("Id_Direccion")
+                );
+                miembros.add(miembro);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener miembros: " + e.getMessage(),
+                    "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }finally {
+            cerrarRecursos(statement, resultSet);
+        }
+
+        return miembros;
     }
 
     private void cerrarRecursos(Statement statement, ResultSet resultSet) {
