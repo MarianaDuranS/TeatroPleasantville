@@ -285,4 +285,12 @@ public class vistaDirecciones extends JFrame {
         gbc.gridy = gridy;
         panel.add(etiqueta, gbc);
     }
+    public static void main(String[] args){
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new vistaDirecciones("alta").setVisible(true);
+            }
+        });
+    }
 }

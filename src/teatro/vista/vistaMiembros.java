@@ -29,15 +29,17 @@ public class vistaMiembros extends  JFrame {
     setResizable(false);
 
     panelMain = new JPanel(new BorderLayout());
+    panelMain.setBackground(new Color(00, 149, 236));
     add(panelMain);
 
     JLabel Titulo= new JLabel("MIEMBROS", SwingConstants.CENTER);
-    Titulo.setFont(new Font("Arial",Font.BOLD,24));
+    Titulo.setFont(new Font("Verdana",Font.BOLD,24));
     Titulo.setBorder(BorderFactory.createEmptyBorder(15,0,15,0));
     panelMain.add(Titulo, BorderLayout.NORTH);
 
     panel= new JPanel();
     panel.setBorder(BorderFactory.createEmptyBorder(0,20,20,20));
+    panel.setBackground(new Color(00, 149, 236));
     panel.setLayout(new GridBagLayout());
     panelMain.add(panel,BorderLayout.CENTER);
 
@@ -88,6 +90,7 @@ public class vistaMiembros extends  JFrame {
     agregarComponentes(txtIdDireccion,1,8);
 
     panelBotones= new JPanel(new FlowLayout(FlowLayout.CENTER,10,10));
+    panelBotones.setBackground(new Color(00, 149, 236));
 
     btnGuardar=new JButton("Guardar");
     panelBotones.add(btnGuardar);
@@ -236,15 +239,31 @@ public class vistaMiembros extends  JFrame {
             JOptionPane.showMessageDialog(this,"Ingrese el id");
             return;
         }
+        btnGuardar.setEnabled(false);
+        SwingWorker<Miembros, Void> worker = new SwingWorker<Miembros, Void>() {
+            @Override
+            protected Miembros doInBackground() throws Exception {
+                return miembrosDAO.mostrarMiembro(idMiembro);
+            }
 
-        Miembros miembro= miembrosDAO.mostrarMiembro(idMiembro);
-        if (miembro != null) {
-            llenadoDesdeCampos(miembro);
-        } else {
-            JOptionPane.showMessageDialog(this, "Miembro no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
-            limpiarCampos();
-        }
-
+            @Override
+            protected void done() {
+                try {
+                    Miembros miembro = get();
+                    if (miembro != null) {
+                        llenadoDesdeCampos(miembro);
+                    } else {
+                        JOptionPane.showMessageDialog(vistaMiembros.this, "Miembro no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+                        limpiarCampos();
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(vistaMiembros.this, "Error al buscar miembro: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    e.printStackTrace();
+                } finally {
+                    btnGuardar.setEnabled(true);
+                }
+            }
+        };
     }
     private Miembros crearMiembroCampos(String idMiembro) throws ParseException{
         String nombre=txtNombre.getText();
@@ -326,17 +345,11 @@ public class vistaMiembros extends  JFrame {
 
     private void agregarEtiquetas(String texto, int gridx, int gridy){
     JLabel etiqueta= new JLabel(texto);
+    etiqueta.setForeground(Color.WHITE);
+    etiqueta.setFont(new Font("Courier New",Font.BOLD,15));
     gbc.gridx = gridx;
         gbc.gridy = gridy;
         panel.add(etiqueta, gbc);
     }
-public static void main(String[] args){
-    SwingUtilities.invokeLater(new Runnable() {
-        @Override
-        public void run() {
-            //new vistaMiembros(seleccion).setVisible(true);
-        }
-    });
-}
 
 }
