@@ -19,7 +19,8 @@ public class InicioSesion extends JFrame{
         setLocationRelativeTo(null);
         setResizable(false);
 
-        panel= new JPanel();
+        panel= new JPanel(new GridBagLayout());
+        panel.setBackground(new Color(50, 60, 80));
         panel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
         panel.setLayout(new GridBagLayout());
         add(panel);
@@ -28,14 +29,19 @@ public class InicioSesion extends JFrame{
         gbc.insets= new Insets(10,10,10,10);
         gbc.fill=GridBagConstraints.HORIZONTAL;
 
+
+
         JLabel etTitulo= new JLabel("Teatro Pleasantville");
-        etTitulo.setFont(new Font("Brasika",Font.BOLD,20));
+        etTitulo.setForeground(Color.WHITE);
+        etTitulo.setFont(new Font("Verdana",Font.BOLD,22));
         etTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridwidth=2;
         agregarComponentes(etTitulo,0,0);
 
 
         JLabel etUsuario = new JLabel("Usuario");
+        etUsuario.setForeground(Color.WHITE);
+        etUsuario.setFont(new Font("Courier New",Font.BOLD,15));
         gbc.gridwidth=1;
         agregarComponentes(etUsuario,0,1);
 
@@ -43,6 +49,8 @@ public class InicioSesion extends JFrame{
         agregarComponentes(txtUsuario,1,1);
 
         JLabel etContra= new JLabel("Contraseña");
+        etContra.setForeground(Color.WHITE);
+        etContra.setFont(new Font("Courier New",Font.BOLD,15));
         agregarComponentes(etContra,0,2);
 
         txtContrasenia= new JPasswordField(8);
@@ -52,6 +60,7 @@ public class InicioSesion extends JFrame{
         btnInicioSesion= new JButton("Iniciar Sesion");
         btnInicioSesion.setPreferredSize(new Dimension(150,30));
         btnInicioSesion.setBackground(new Color(226, 187, 128));
+        btnInicioSesion.setForeground(Color.white);
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.CENTER;
         btnInicioSesion.addActionListener(this::validacionInicioSesion);
