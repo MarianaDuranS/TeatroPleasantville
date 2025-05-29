@@ -1,6 +1,7 @@
 package teatro.vista;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class MenuPrincipalTeatro extends JFrame{
@@ -26,8 +27,19 @@ public class MenuPrincipalTeatro extends JFrame{
         setLocationRelativeTo(null);
         setResizable(false);
 
-        JMenuBar menuBar= new JMenuBar();
+        panelMain= new JPanel();
+        panelMain.setLayout(new BorderLayout());
 
+        ImageIcon fondoImagen = new ImageIcon(getClass().getResource("/teatro/imagenes/fondoTeatro.jpg"));
+        JLabel lblFondo = new JLabel(fondoImagen);
+        lblFondo.setHorizontalAlignment(JLabel.CENTER);
+        lblFondo.setVerticalAlignment(JLabel.CENTER);
+        panelMain.add(lblFondo, BorderLayout.CENTER);
+
+        add(panelMain);
+
+        JMenuBar menuBar= new JMenuBar();
+        menuBar.setBackground(new Color(00, 149, 236));
         //Opciones Asientos
         menuOpcionesAsientos= new JMenu("Asientos");
         menuBar.add(menuOpcionesAsientos);
