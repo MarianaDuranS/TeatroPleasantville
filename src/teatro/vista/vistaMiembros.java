@@ -13,9 +13,9 @@ import java.util.List;
 
 public class vistaMiembros extends  JFrame {
     private String seleccion;
-    private JTextField txtIdMiembro,txtNombre,txtPrimerApellido,txtsegundoApellido,txtFechaNacimiento,txtEmail,txtIdDireccion;
+    private JTextField txtIdMiembro,txtNombre,txtPrimerApellido,txtSegundoApellido,txtFechaNacimiento,txtEmail,txtIdDireccion;
     private JSpinner spinnerGenero,spinnerEstadoCuota;
-    private JButton btnGuardar,btnRegresar,btnReestablecer;
+    private JButton btnGuardar,btnRegresar,btnReestablecer,btnBuscar;
     GridBagConstraints gbc;
     private JPanel panelMain,panel,panelBotones;
     private MiembrosDAO miembrosDAO;
@@ -68,8 +68,8 @@ public class vistaMiembros extends  JFrame {
         agregarComponentes(txtPrimerApellido,1,2);
 
         agregarEtiquetas("Segundo apellido: ",0,3);
-        txtsegundoApellido= new JTextField(30);
-        agregarComponentes(txtsegundoApellido,1,3);
+        txtSegundoApellido= new JTextField(30);
+        agregarComponentes(txtSegundoApellido,1,3);
 
         agregarEtiquetas("Fecha nacimiento :",0,4);
         txtFechaNacimiento= new JTextField(20);
@@ -96,10 +96,10 @@ public class vistaMiembros extends  JFrame {
         panelBotones= new JPanel(new FlowLayout(FlowLayout.CENTER,10,10));
         panelBotones.setBackground(new Color(00, 149, 236));
 
-        btnGuardar=new JButton("Guardar");
+        btnGuardar=new JButton("GUARDAR");
         panelBotones.add(btnGuardar);
 
-        btnRegresar= new JButton("Regresar");
+        btnRegresar= new JButton("REGRESAR");
         panelBotones.add(btnRegresar);
         btnRegresar.addActionListener(new ActionListener() {
             @Override
@@ -111,13 +111,23 @@ public class vistaMiembros extends  JFrame {
             }
         });
 
-        btnReestablecer= new JButton("Reestablecer");
+        btnReestablecer= new JButton("REESTABLECER");
         panelBotones.add(btnReestablecer);
         btnReestablecer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 limpiarCampos();
             }
+        });
+
+        btnBuscar= new JButton("BUSCAR");
+        panel.add(btnBuscar);
+        btnBuscar.addActionListener(new ActionListener() {
+            @Override
+                public void actionPerformed(ActionEvent e) {
+                    buscarMiembro();
+                }
+
         });
 
         gbc.gridx = 0;
@@ -171,9 +181,7 @@ public class vistaMiembros extends  JFrame {
 
         habilitarCampos(true);
         txtIdMiembro.setEnabled(true);
-        txtIdMiembro.addActionListener(e -> {
-            buscarMiembro();
-        });
+
     }
     private void configuracionConsultasMiembros(){
         setTitle("Teatro Pleasantville - Consultar Miembro");
@@ -225,14 +233,14 @@ public class vistaMiembros extends  JFrame {
         try {
             String idMiembro = txtIdMiembro.getText().trim();
             Miembros miembro = crearMiembroCampos(idMiembro);
-            if (miembrosDAO.editarMiembro(miembro)) {
-                JOptionPane.showMessageDialog(this, "Miembro actualizado con éxito");
-                limpiarCampos();
-                habilitarCampos(false);
-                txtIdMiembro.setEnabled(true);
-            } else {
-                JOptionPane.showMessageDialog(this, "Error al actualizar miembro", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+           if (validarCampos()==true){
+               if (miembrosDAO.editarMiembro(miembro)) {
+                   JOptionPane.showMessageDialog(this, "Miembro actualizado con éxito");
+                   limpiarCampos();
+               }
+           } else {
+               JOptionPane.showMessageDialog(this, "Error al actualizar miembro", "Error", JOptionPane.ERROR_MESSAGE);
+           }
         } catch (ParseException e) {
             JOptionPane.showMessageDialog(this, "Formato de fecha inválido (use yyyy-MM-dd)", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -295,7 +303,7 @@ public class vistaMiembros extends  JFrame {
     private Miembros crearMiembroCampos(String idMiembro) throws ParseException{
         String nombre=txtNombre.getText();
         String primerApellido=txtPrimerApellido.getText();
-        String segundoApellido=txtsegundoApellido.getText();
+        String segundoApellido=txtSegundoApellido.getText();
         Date fechaNacimiento=formato.parse(txtFechaNacimiento.getText());
         String genero=(String) spinnerGenero.getValue();
         String email=txtEmail.getText();
@@ -308,7 +316,7 @@ public class vistaMiembros extends  JFrame {
         txtIdMiembro.setText(miembro.getIdMiembro());
         txtNombre.setText(miembro.getNombre() != null ? miembro.getNombre() : "");
         txtPrimerApellido.setText(miembro.getPrimerApellido() != null ? miembro.getPrimerApellido() : "");
-        txtsegundoApellido.setText(miembro.getSegundoApellido() != null ? miembro.getSegundoApellido() : "");
+        txtSegundoApellido.setText(miembro.getSegundoApellido() != null ? miembro.getSegundoApellido() : "");
         txtFechaNacimiento.setText(miembro.getFechaNacimiento() != null ? formato.format(miembro.getFechaNacimiento()) : "");
         spinnerGenero.setValue(miembro.getGenero() != null ? miembro.getGenero() : "Hombre");
         txtEmail.setText(miembro.getEmail() != null ? miembro.getEmail() : "");
@@ -324,7 +332,7 @@ public class vistaMiembros extends  JFrame {
     private void habilitarCampos(boolean habilitar){
         txtNombre.setEnabled(habilitar);
         txtPrimerApellido.setEnabled(habilitar);
-        txtsegundoApellido.setEnabled(habilitar);
+        txtSegundoApellido.setEnabled(habilitar);
         txtFechaNacimiento.setEnabled(habilitar);
         spinnerGenero.setEnabled(habilitar);
         txtEmail.setEnabled(habilitar);
@@ -335,7 +343,7 @@ public class vistaMiembros extends  JFrame {
         txtIdMiembro.setText("");
         txtNombre.setText("");
         txtPrimerApellido.setText("");
-        txtsegundoApellido.setText("");
+        txtSegundoApellido.setText("");
         txtFechaNacimiento.setText("");
         spinnerGenero.setValue("Hombre");
         txtEmail.setText("");
@@ -343,13 +351,28 @@ public class vistaMiembros extends  JFrame {
         txtIdDireccion.setText("");
     }
     private boolean validarCampos(){
+        if (txtIdMiembro.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this,"El Id es obligatorio");
+            return false;
+        }
         if (txtNombre.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this,"El nombre es obligatorio");
+            return false;
+        }else if (!txtNombre.getText().matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+")) {
+            JOptionPane.showMessageDialog(this, "El nombre solo puede contener letras", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
         if (txtPrimerApellido.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this,"El primer apellido es obligatorio");
+            return false;
+        }else if (!txtPrimerApellido.getText().matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+")) {
+            JOptionPane.showMessageDialog(this, "El apellido solo puede contener letras", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!txtSegundoApellido.getText().matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+")) {
+            JOptionPane.showMessageDialog(this, "El apellido solo puede contener letras", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
@@ -360,10 +383,24 @@ public class vistaMiembros extends  JFrame {
         if (txtEmail.getText().isEmpty() || !txtEmail.getText().contains("@")) {
             JOptionPane.showMessageDialog(this,"Ingrese un email válido");
             return false;
+        }else{
+            String email = txtEmail.getText().trim();
+            if (!email.contains("@") ||
+                    email.startsWith("@") ||
+                    email.endsWith("@") ||
+                    email.indexOf("@") != email.lastIndexOf("@")) {
+                JOptionPane.showMessageDialog(this, "Ingrese un email válido (formato: usuario@dominio.com)", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
         }
 
-        if (txtIdDireccion.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this,"El ID de dirección es obligatorio");
+        String idDireccion = txtIdDireccion.getText().trim();
+
+        if (idDireccion.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El ID de dirección es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (idDireccion.length() != 8 || !idDireccion.matches("\\d+")) {
+            JOptionPane.showMessageDialog(this, "El ID de dirección debe ser un número de 8 dígitos", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
@@ -417,13 +454,13 @@ public class vistaMiembros extends  JFrame {
         gbc.gridy = gridy;
         panel.add(etiqueta, gbc);
     }
-
-    public static void main(String args[]){
+    public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new vistaMiembros("altas").setVisible(true);
+                new vistaMiembros("cambio").setVisible(true);
             }
         });
     }
+
 }
