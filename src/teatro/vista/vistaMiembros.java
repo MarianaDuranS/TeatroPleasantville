@@ -8,22 +8,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class vistaMiembros extends  JFrame {
     private String seleccion;
-    private JTextField txtIdMiembro,txtNombre,txtPrimerApellido,txtSegundoApellido,txtFechaNacimiento,txtEmail,txtIdDireccion;
+    private JTextField txtIdMiembro,txtNombre,txtPrimerApellido,txtSegundoApellido,txtFechaNacimiento,txtEmail,txtIdDireccion,txtBusqueda;
     private JSpinner spinnerGenero,spinnerEstadoCuota;
     private JButton btnGuardar,btnRegresar,btnReestablecer,btnBuscar;
     GridBagConstraints gbc;
     private JPanel panelMain,panel,panelBotones;
     private MiembrosDAO miembrosDAO;
     private final SimpleDateFormat formato= new SimpleDateFormat("yyyy-MM-dd");
+    private JComboBox<String> comboFiltro;
     private JTable tablaMiembros;
     private DefaultTableModel modeloTabla;
     public vistaMiembros(String seleccion){
         this.seleccion = seleccion;
+
         miembrosDAO= new MiembrosDAO();
         setTitle("Teatro Pleasantville - vistaMiembros");
         setSize(900, 800);
@@ -124,9 +127,9 @@ public class vistaMiembros extends  JFrame {
         panel.add(btnBuscar);
         btnBuscar.addActionListener(new ActionListener() {
             @Override
-                public void actionPerformed(ActionEvent e) {
-                    buscarMiembro();
-                }
+            public void actionPerformed(ActionEvent e) {
+                buscarMiembro();
+            }
 
         });
 
@@ -150,13 +153,56 @@ public class vistaMiembros extends  JFrame {
                 configuracionCambiosMiembros();
                 break;
             case "consulta":
+                agregarPanelBusqueda();
                 configuracionConsultasMiembros();
                 break;
             default:
+
                 configuracionConsultasMiembros();
         }
 
     }
+    private void agregarPanelBusqueda(){
+        JPanel panelBusqueda = new JPanel(new GridBagLayout());
+        panelBusqueda.setBackground(new Color(00, 149, 236));
+        panelBusqueda.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        GridBagConstraints gbcBusqueda = new GridBagConstraints();
+        gbcBusqueda.insets = new Insets(5, 5, 5, 5);
+        gbcBusqueda.fill = GridBagConstraints.HORIZONTAL;
+
+        // Combo box para seleccionar el criterio de búsqueda
+        String[] criterios = {"ID Miembro", "Nombre", "Primer Apellido", "Segundo Apellido",
+                "Género", "Estado Cuota", "Todos"};
+        comboFiltro = new JComboBox<>(criterios);
+
+        JLabel lblFiltro = new JLabel("Buscar por:");
+        lblFiltro.setForeground(Color.WHITE);
+        lblFiltro.setFont(new Font("Courier New", Font.BOLD, 15));
+
+        txtBusqueda = new JTextField(20);
+        JButton btnBuscarAvanzada = new JButton("Buscar");
+        btnBuscarAvanzada.addActionListener(e -> busquedaFiltro());
+
+        // Posicionamiento de componentes
+        gbcBusqueda.gridx = 0;
+        gbcBusqueda.gridy = 1;
+        panelBusqueda.add(lblFiltro, gbcBusqueda);
+
+        gbcBusqueda.gridx = 2;
+        panelBusqueda.add(comboFiltro, gbcBusqueda);
+
+        gbcBusqueda.gridx = 3;
+        panelBusqueda.add(txtBusqueda, gbcBusqueda);
+
+        gbcBusqueda.gridx = 4;
+        panelBusqueda.add(btnBuscarAvanzada, gbcBusqueda);
+
+        panelMain.add(panelBusqueda, BorderLayout.CENTER);
+        btnBuscar.setText("Buscar por ID");
+        btnBuscar.addActionListener(e -> buscarMiembro());
+    }
+
     private void configuracionAltasMiembros(){
         setTitle("Teatro Pleasantville - Altas Miembros");
         btnGuardar.setText("Guardar");
@@ -185,11 +231,127 @@ public class vistaMiembros extends  JFrame {
     }
     private void configuracionConsultasMiembros(){
         setTitle("Teatro Pleasantville - Consultar Miembro");
+        panel.setVisible(false);
         btnGuardar.setText("Buscar");
         btnGuardar.addActionListener(e -> buscarMiembro());
 
         habilitarCampos(false);
-        txtIdMiembro.setEnabled(true);
+    }
+    private void busquedaFiltro(){
+        String criterio = (String) comboFiltro.getSelectedItem();
+        String valor = txtBusqueda.getText().trim();
+
+        List<Miembros> resultados = new ArrayList<>();
+
+        try {
+            switch (criterio) {
+                case "ID Miembro":
+                    Miembros miembro = miembrosDAO.mostrarMiembro(valor);
+                    if (miembro != null) resultados.add(miembro);
+                    break;
+                case "Nombre":
+                    resultados = buscarPorNombre(valor);
+                    break;
+                case "Primer Apellido":
+                    resultados = buscarPorApellido(valor, "primer");
+                    break;
+                case "Segundo Apellido":
+                    resultados = buscarPorApellido(valor, "segundo");
+                    break;
+                case "Género":
+                    resultados = buscarPorGenero(valor);
+                    break;
+                case "Estado Cuota":
+                    resultados = buscarPorEstadoCuota(valor);
+                    break;
+                case "Todos":
+                    resultados = miembrosDAO.obtenerTodosMiembros();
+                    break;
+            }
+
+            mostrarResultadosBusqueda(resultados);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error en la búsqueda: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private List<Miembros> buscarPorNombre(String nombre) {
+        List<Miembros> todos = miembrosDAO.obtenerTodosMiembros();
+        List<Miembros> resultados = new ArrayList<>();
+
+        for (Miembros m : todos) {
+            if (m.getNombre() != null && m.getNombre().toLowerCase().contains(nombre.toLowerCase())) {
+                resultados.add(m);
+            }
+        }
+        return resultados;
+    }
+
+    private List<Miembros> buscarPorApellido(String apellido, String tipo) {
+        List<Miembros> todos = miembrosDAO.obtenerTodosMiembros();
+        List<Miembros> resultados = new ArrayList<>();
+
+        for (Miembros m : todos) {
+            if (tipo.equals("primer") && m.getPrimerApellido() != null &&
+                    m.getPrimerApellido().toLowerCase().contains(apellido.toLowerCase())) {
+                resultados.add(m);
+            } else if (tipo.equals("segundo") && m.getSegundoApellido() != null &&
+                    m.getSegundoApellido().toLowerCase().contains(apellido.toLowerCase())) {
+                resultados.add(m);
+            }
+        }
+        return resultados;
+    }
+
+    private List<Miembros> buscarPorGenero(String genero) {
+        List<Miembros> todos = miembrosDAO.obtenerTodosMiembros();
+        List<Miembros> resultados = new ArrayList<>();
+
+        for (Miembros m : todos) {
+            if (m.getGenero() != null && m.getGenero().equalsIgnoreCase(genero)) {
+                resultados.add(m);
+            }
+        }
+        return resultados;
+    }
+
+    private List<Miembros> buscarPorEstadoCuota(String estado) {
+        List<Miembros> todos = miembrosDAO.obtenerTodosMiembros();
+        List<Miembros> resultados = new ArrayList<>();
+
+        for (Miembros m : todos) {
+            if (m.getEstadoCuota() != null && m.getEstadoCuota().equalsIgnoreCase(estado)) {
+                resultados.add(m);
+            }
+        }
+        return resultados;
+    }
+
+    private void mostrarResultadosBusqueda(List<Miembros> resultados) {
+        modeloTabla.setRowCount(0);
+
+        if (resultados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se encontraron resultados",
+                    "Búsqueda", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        for (Miembros miembro : resultados) {
+            Object[] fila = {
+                    miembro.getIdMiembro(),
+                    miembro.getNombre(),
+                    miembro.getPrimerApellido(),
+                    miembro.getSegundoApellido(),
+                    formato.format(miembro.getFechaNacimiento()),
+                    miembro.getGenero(),
+                    miembro.getEmail(),
+                    miembro.getEstadoCuota(),
+                    miembro.getIdDireccion()
+            };
+            modeloTabla.addRow(fila);
+        }
     }
     private void guardarMiembro(){
         if (validarCampos()){
@@ -234,14 +396,14 @@ public class vistaMiembros extends  JFrame {
         try {
             txtIdMiembro.setEnabled(true);
             Miembros miembro = crearMiembroCampos(txtIdMiembro.getText());
-           if (validarCampos()==true){
-               if (miembrosDAO.editarMiembro(miembro)) {
-                   JOptionPane.showMessageDialog(this, "Miembro actualizado con éxito");
-                   limpiarCampos();
-               }
-           } else {
-               JOptionPane.showMessageDialog(this, "Error al actualizar miembro", "Error", JOptionPane.ERROR_MESSAGE);
-           }
+            if (validarCampos()==true){
+                if (miembrosDAO.editarMiembro(miembro)) {
+                    JOptionPane.showMessageDialog(this, "Miembro actualizado con éxito");
+                    limpiarCampos();
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al actualizar miembro", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         } catch (ParseException e) {
             JOptionPane.showMessageDialog(this, "Formato de fecha inválido (use yyyy-MM-dd)", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -353,13 +515,7 @@ public class vistaMiembros extends  JFrame {
         txtIdDireccion.setText("");
     }
     private boolean validarCampos(){
-        if (txtIdMiembro.getText().isEmpty()){
-            JOptionPane.showMessageDialog(this,"El Id es obligatorio");
-            return false;
-        } else if (txtIdMiembro.getText().length() != 8 || !txtIdMiembro.getText().matches("\\d+")) {
-            JOptionPane.showMessageDialog(this, "El ID de dirección debe ser un número de 8 dígitos", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
+
         if (txtNombre.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this,"El nombre es obligatorio");
             return false;
@@ -463,7 +619,7 @@ public class vistaMiembros extends  JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new vistaMiembros("cambio").setVisible(true);
+                new vistaMiembros("consulta").setVisible(true);
             }
         });
     }
