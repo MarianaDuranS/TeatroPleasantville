@@ -180,7 +180,7 @@ public class vistaMiembros extends  JFrame {
         btnGuardar.addActionListener(e -> actualizarMiembro());
 
         habilitarCampos(true);
-        txtIdMiembro.setEnabled(true);
+
 
     }
     private void configuracionConsultasMiembros(){
@@ -190,7 +190,6 @@ public class vistaMiembros extends  JFrame {
 
         habilitarCampos(false);
         txtIdMiembro.setEnabled(true);
-        txtIdDireccion.setEditable(true);
     }
     private void guardarMiembro(){
         if (validarCampos()){
@@ -217,6 +216,7 @@ public class vistaMiembros extends  JFrame {
         if (txtIdMiembro.getText().isEmpty()){
             JOptionPane.showMessageDialog(this,"Ingrese un ID");
         }
+        buscarMiembro();
         int confirmacion= JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar este miembro?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
         if (confirmacion == JOptionPane.YES_OPTION) {
             if (miembrosDAO.eliminarMiembro(idMiembro)) {
@@ -230,9 +230,10 @@ public class vistaMiembros extends  JFrame {
         cargarDatos();
     }
     private void actualizarMiembro(){
+
         try {
-            String idMiembro = txtIdMiembro.getText().trim();
-            Miembros miembro = crearMiembroCampos(idMiembro);
+            txtIdMiembro.setEnabled(true);
+            Miembros miembro = crearMiembroCampos(txtIdMiembro.getText());
            if (validarCampos()==true){
                if (miembrosDAO.editarMiembro(miembro)) {
                    JOptionPane.showMessageDialog(this, "Miembro actualizado con éxito");
@@ -269,6 +270,7 @@ public class vistaMiembros extends  JFrame {
                                 "Miembro encontrado con éxito",
                                 "Éxito",
                                 JOptionPane.INFORMATION_MESSAGE);
+                        txtIdMiembro.setEnabled(false);
                         selectMemberInTable(idMiembro);
                     } else {
                         JOptionPane.showMessageDialog(vistaMiembros.this,
@@ -354,6 +356,9 @@ public class vistaMiembros extends  JFrame {
         if (txtIdMiembro.getText().isEmpty()){
             JOptionPane.showMessageDialog(this,"El Id es obligatorio");
             return false;
+        } else if (txtIdMiembro.getText().length() != 8 || !txtIdMiembro.getText().matches("\\d+")) {
+            JOptionPane.showMessageDialog(this, "El ID de dirección debe ser un número de 8 dígitos", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
         if (txtNombre.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this,"El nombre es obligatorio");
@@ -371,8 +376,8 @@ public class vistaMiembros extends  JFrame {
             return false;
         }
 
-        if (!txtSegundoApellido.getText().matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+")) {
-            JOptionPane.showMessageDialog(this, "El apellido solo puede contener letras", "Error", JOptionPane.ERROR_MESSAGE);
+        if (!txtSegundoApellido.getText().isEmpty() && !txtSegundoApellido.getText().matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+")) {
+            JOptionPane.showMessageDialog(this, "El segundo apellido solo puede contener letras", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
