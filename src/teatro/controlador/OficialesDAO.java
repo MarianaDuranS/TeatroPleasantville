@@ -1,5 +1,5 @@
 package teatro.controlador;
-import teatro.conexionDB.conexionBD;
+import teatro.conexionDB.ConexionBD;
 import teatro.modelo.Oficiales;
 
 import javax.swing.*;
@@ -10,7 +10,7 @@ public class OficialesDAO {
     private Connection conexion;
 
     public OficialesDAO(){
-        this.conexion=conexionBD.getInstancia().getConexion();
+        ConexionBD.getobjetoConexion();
     }
 
     public boolean agregarOficiales(Oficiales oficiales) {

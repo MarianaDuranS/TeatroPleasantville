@@ -1,5 +1,5 @@
 package teatro.controlador;
-import teatro.conexionDB.conexionBD;
+import teatro.conexionDB.ConexionBD;
 import teatro.modelo.Miembros;
 import javax.swing.*;
 import java.sql.*;
@@ -10,7 +10,8 @@ public class MiembrosDAO {
     private Connection conexion;
 
     public MiembrosDAO() {
-        this.conexion=conexionBD.getInstancia().getConexion();
+        ConexionBD conexionBD=ConexionBD.getobjetoConexion();
+        this.conexion=ConexionBD.getobjetoConexion().getConnection();
     }
 
     public boolean agregarMiembro(Miembros miembro) {

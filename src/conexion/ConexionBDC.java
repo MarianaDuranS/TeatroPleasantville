@@ -1,10 +1,12 @@
-package teatro.conexionDB;
+package conexion;
+
 import java.sql.*;
 
-public class ConexionBD {
+ class ConexionBD {
+
     private Connection conexion;
     private static ConexionBD objetoConexion;
-    private PreparedStatement stm;
+    private Statement stm;  //PreparedStatement ES MEJOR YA QUE EVITA SQL Injection
     private ResultSet rs;
 
     public static ConexionBD getobjetoConexion(){
@@ -15,49 +17,44 @@ public class ConexionBD {
         }
     }
 
-    public Connection getConnection() {
-        return conexion;
-    }
-
     private ConexionBD(){
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            //127.0.0.1
-            String URL = "jdbc:mysql://localhost:3306/teatro_pleasantville";
-            conexion = DriverManager.getConnection(URL, "root", "carmelo");
+                                    //127.0.0.1
+            String URL = "jdbc:mysql://localhost:3306/BD_Topicos_2025";
+            conexion = DriverManager.getConnection(URL, "salvatore", "salvatore");
 
             System.out.println("YEEEEI Casi son ingeniera/o INMORTAL !!!!");
 
         } catch (ClassNotFoundException e) {
             System.out.println("Error en el connector/driver");
         } catch (SQLException e) {
-            e.printStackTrace();
+           e.printStackTrace();
             System.out.println("Error en la conexion a MySQL");
         }
     }
 
-    public boolean ejecutarInstruccionLMD(String sql) {
+    //CRUD - Create Read Update Delete
+    //Metodo para los proces de ABC (altas, bajas y cambios)
+    public boolean ejecutarInstruccionLMD(String sql){
         boolean res = false;
         try {
-            stm = conexion.prepareStatement(sql);
-            int rowsAffected = stm.executeUpdate(); // Cambia a stm.executeUpdate()
-            if (rowsAffected >= 1) {
+            stm = conexion.createStatement();
+            if(stm.executeUpdate(sql) >=1)
                 res = true;
-            }
         } catch (SQLException e) {
-            System.out.println("Error en la ejecución de la instrucción SQL: " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("Error en la ejecucion de la instruccion SQL");
         }
         return res;
     }
 
     //Metodo para CONSULTAS
-    public ResultSet ejecutarInstruccionSQL(String sql) {
+    public ResultSet ejecutarInstruccionSQL(String sql){
         rs = null;
         System.out.println("SQL => " + sql);
         try {
-            stm = conexion.prepareStatement(sql);
-            rs = stm.executeQuery();
+            stm = conexion.createStatement();
+            rs = stm.executeQuery(sql);
         } catch (SQLException e) {
             System.out.println("Error en la ejecucion de la instruccion SQL");
         }
@@ -68,4 +65,5 @@ public class ConexionBD {
         System.out.println("Magia magia con INTELLIJ");
         new ConexionBD();
     }
+
 }

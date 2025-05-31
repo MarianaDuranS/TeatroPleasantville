@@ -1,12 +1,12 @@
 package teatro.controlador;
-import teatro.conexionDB.conexionBD;
+import teatro.conexionDB.ConexionBD;
 import teatro.modelo.Direcciones;
 import java.sql.*;
 import javax.swing.JOptionPane;
 public class DireccionesDAO {
     private Connection conexion;
     public DireccionesDAO(){
-       this.conexion=conexionBD.getInstancia().getConexion();
+      ConexionBD.getobjetoConexion();
     }
 
 
